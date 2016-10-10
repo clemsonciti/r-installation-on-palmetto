@@ -150,7 +150,7 @@ Saving to: “R-3.0.0.tar.gz”
 $ tar xzf R-3.0.0.tar.gz
 ```
 
-- Assume that R is to be installed into /home/yourusername/software/, 
+- Assume that R is to be installed into /home/yourusername/software/R-3.0.0, 
 the following commands must be executed:
 
 ```bash
@@ -160,14 +160,33 @@ $ mkdir software
 
 $ cd tmp/R-3.0.0
 
-$ ./configure --prefix=/home/yourusername/software
+$ ./configure --prefix=/home/yourusername/software/R-3.0.0
 
 $ make
 
 $ make install
 ```
 
+- To use this location installation of R, path to its 
+executables must be exported:
 
+```bash
+$ export R_HOME=/home/yourusername/software/R-3.0.0
+
+$ export PATH=$R_HOME/bin:$PATH
+
+$ R --version
+WARNING: ignoring environment value of R_HOME
+R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+http://www.gnu.org/licenses/.
+```
 
 
 ### R From Python Anaconda
@@ -200,26 +219,20 @@ Currently, a conda environment containing R 3.3.1
 is already set up for Anaconda3/2.5.0, and this is 
 also the default R kernel for Palmetto's JupyterHub
 
-
-
 ```bash
-$ module avail python
+$ module load anaconda3/2.5.0
 
-------------------------- /software/modulefiles -------------------------
-python/2.7.6 python/3.3.3 python/3.4
-```
+$ source activate R
+(R) [lngo@node0042 ~]$ R --version
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
-Any of these modules can be loaded
-to use a different version of Python than 2.6.6:
-
-```bash
-$ module add python/3.4
-
-$ python --version
-Python 3.4.2
-
-$ which python
-/software/python/3.4/bin/python
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+http://www.gnu.org/licenses/.
 ```
 
 ### Anaconda modules
@@ -238,33 +251,6 @@ Python 3.5.2 :: Anaconda 2.5.0 (64-bit)
 $ which python
 /software/anaconda3/2.5.0/bin/python
 ```
-
-The `anaconda3` modules contain Python 3,
-while the `anaconda` modules contain Python 2.
-[Anaconda][anaconda-overview] is a Python "distribution",
-which bundles together several packages
-that are used in scientific computing and data analysis,
-including `numpy`, `scipy`, `matplotlib`, `pandas`, and
-several hundreds of others.
-Using the Anaconda distribution removes the burden
-of manually installing these packages from source.
-Once the Anaconda module is loaded,
-importing these packages "just works":
-
-```bash
-$ module add anaconda3/2.5.0
-$ python
-Python 3.5.2 |Anaconda 2.5.0 (64-bit)| (default, Jul  2 2016, 17:53:06)
-[GCC 4.4.7 20120313 (Red Hat 4.4.7-1)] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import tables       # imports the PyTables package
->>> tables.__file__     # prints where the tables module is loaded from
-'/software/anaconda3/2.5.0/lib/python3.5/site-packages/tables/__init__.py'
-```
-Importantly, Anaconda provides the `conda` package manager,
-which will be discussed later in this article.
-
-
 
 ### Which R should I use?
 
