@@ -114,56 +114,72 @@ It is also possible for users to build, configure, and install
 customized version of R from source. To do so, the following
 steps must be taken:
 
-- Visit the R-project web page at https://cran.r-project.org/mirrors.html 
-to select a mirror. In the next steps, it is assumed that the mirror from 
-UC Berkeley is selected.
-
-- Append */src/base/* to the mirror's URL (in this case
-we have https://cran.cnr.berkeley.edu/src/base/)
-
-- Select the major versions of R (R-0, R-1, R-2, R-3)
-
-- Right click and copy the link to the specific version
-of R source code that you would like to build (in this case we
-choose 3.0.0
-
-- Download the selected source code into a temporary directory 
-on Palmetto
-
+- Create a temporary installation directory
 ```bash
+$ cd $HOME
 $ mkdir tmp
-
-$ cd tmp
-
-$ wget https://cran.cnr.berkeley.edu/src/base/R-3/R-3.0.0.tar.gz
---2016-10-10 14:49:49--  https://cran.cnr.berkeley.edu/src/base/R-3/R-3.0.0.tar.gz
-Resolving cran.cnr.berkeley.edu... 169.229.201.201, 2607:f140:0:8000::201
-Connecting to cran.cnr.berkeley.edu|169.229.201.201|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 25482059 (24M) [application/x-gzip]
-Saving to: “R-3.0.0.tar.gz”
-
-100%[===========================================================================================>] 25,482,059  9.28M/s   in 2.6s
-
-2016-10-10 14:49:52 (9.28 MB/s) - “R-3.0.0.tar.gz” saved [25482059/25482059]
-
-$ tar xzf R-3.0.0.tar.gz
+$ mkdir -p software/packages
 ```
 
-- Assume that R is to be installed into /home/yourusername/software/R-3.0.0, 
-the following commands must be executed:
+- Dependency Installatio: 
 
 ```bash
-$ cd ~
-
-$ mkdir software
-
-$ cd tmp/R-3.0.0
-
-$ ./configure --prefix=/home/yourusername/software/R-3.0.0
-
+$ cd $HOME/tmp
+$ wget http://zlib.net/zlib-1.2.11.tar.gz
+$ wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+$ wget http://tukaani.org/xz/xz-5.2.2.tar.gz
+$ wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz
+$ wget https://www.openssl.org/source/old/1.0.0/openssl-1.0.0k.tar.gz
+$ wget --no-check-certificate https://curl.haxx.se/download/curl-7.54.0.tar.gz
+$ tar xzf zlib-1.2.11.tar.gz
+$ tar xzf bzip2-1.0.6.tar.gz
+$ tar xzf xz-5.2.2.tar.gz
+$ tar xzf pcre-8.40.tar.gz
+$ tar xzf openssl-1.0.0k.tar.gz
+$ tar xzf curl-7.47.1.tar.gz
+$ cd zlib-1.2.11
+$ ./configure --prefix=$HOME/software/packages
 $ make
+$ make install
+$ cd ../bzip2-1.0.6
+$ make -f Makefile-libbz2_so
+$ make clean
+$ make
+$ make -n install PREFIX=$HOME/software/packages
+$ make install PREFIX=$HOME/software/packages
+$ cd ../xz-5.2.2
+$ ./configure --prefix=$HOME/software/packages
+$ make -j3
+$ make install
+$ cd ../pcre-8.40
+$ ./configure --enable-utf8 --prefix=$HOME/software/packages
+$ make -j3
+$ make install
+$ cd ../openssl-1.0.0k
+$ ./config --prefix-$HOME/software/packages --openssldir=$HOME/software/openssl shared
+$ make
+$ make install
+$ cd ../curl-7.47.1.tar.gz
+$ ./configure ./configure --prefix=$HOME/software/packages --with-ssl=$HOME/software/openssl
+$ make
+$ make install
+$ export PATH=$HOME/software/packages/bin:$PATH
+$ export LD_LIBRARY_PATH=$HOME/software/packages/lib:$LD_LIBRARY_PATH 
+$ export CFLAGS="-I$HOME/software/packages/include" 
+$ export LDFLAGS="-L$HOME/software/packages/lib"
+```
 
+
+- Download the selected R source code into a temporary location in your home directory 
+on Palmetto and install R into /home/yourusername/software/R/3.4.0
+
+```bash
+$ cd $HOME/tmp
+$ wget https://cran.r-project.org/src/base/R-3/R-3.4.0.tar.gz
+$ tar xzf R-3.4.0.tar.gz
+$ cd tmp/R-3.4.0
+$ ./configure --prefix=/home/yourusername/software/R-3.4.0
+$ make
 $ make install
 ```
 
@@ -171,21 +187,27 @@ $ make install
 executables must be exported:
 
 ```bash
-$ export R_HOME=/home/yourusername/software/R-3.0.0
-
+$ export R_HOME=/home/yourusername/software/R-3.4.0
 $ export PATH=$R_HOME/bin:$PATH
-
-$ R --version
-WARNING: ignoring environment value of R_HOME
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
-Copyright (C) 2013 The R Foundation for Statistical Computing
-Platform: x86_64-unknown-linux-gnu (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under the terms of the
-GNU General Public License versions 2 or 3.
-For more information about these matters see
-http://www.gnu.org/licenses/.
+$ R                                                                    
+                                                                                                
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"                                           
+Copyright (C) 2017 The R Foundation for Statistical Computing                                   
+Platform: x86_64-pc-linux-gnu (64-bit)                                                          
+                                                                                                
+R is free software and comes with ABSOLUTELY NO WARRANTY.                                       
+You are welcome to redistribute it under certain conditions.                                    
+Type 'license()' or 'licence()' for distribution details.                                       
+                                                                                                
+  Natural language support but running in an English locale                                     
+                                                                                                
+R is a collaborative project with many contributors.                                            
+Type 'contributors()' for more information and                                                  
+'citation()' on how to cite R or R packages in publications.                                    
+                                                                                                
+Type 'demo()' for some demos, 'help()' for on-line help, or                                     
+'help.start()' for an HTML browser interface to help.                                           
+Type 'q()' to quit R.      
 ```
 
 
@@ -216,11 +238,11 @@ $ which python
 
 
 Currently, a conda environment containing R 3.3.1
-is already set up for Anaconda3/2.5.0, and this is 
+is already set up for Anaconda3/4.2.0, and this is 
 also the default R kernel for Palmetto's JupyterHub
 
 ```bash
-$ module load anaconda3/2.5.0
+$ module load anaconda3/4.2.0
 
 $ source activate R
 (R) [lngo@node0042 ~]$ R --version
@@ -233,23 +255,6 @@ You are welcome to redistribute it under the terms of the
 GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
-```
-
-### Anaconda modules
-
-There are also several "Anaconda" modules available on the cluster.
-
-```bash
-$ module avail anaconda
-anaconda/1.9.1  anaconda/2.3.0  anaconda/2.4.0  anaconda/2.5.0  anaconda/4.0.0  anaconda3/2.5.0 anaconda3/4.0.0
-
-$ module add anaconda3/2.5.0
-
-$ python --version
-Python 3.5.2 :: Anaconda 2.5.0 (64-bit)
-
-$ which python
-/software/anaconda3/2.5.0/bin/python
 ```
 
 ### Which R should I use?
