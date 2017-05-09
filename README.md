@@ -121,7 +121,7 @@ $ mkdir tmp
 $ mkdir -p software/packages
 ```
 
-- Dependency Installatio: 
+- Dependency Installation: 
 
 ```bash
 $ cd $HOME/tmp
