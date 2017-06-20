@@ -130,7 +130,7 @@ $ wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 $ wget http://tukaani.org/xz/xz-5.2.2.tar.gz
 $ wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.40.tar.gz
 $ wget https://www.openssl.org/source/old/1.0.0/openssl-1.0.0k.tar.gz
-$ wget --no-check-certificate https://curl.haxx.se/download/curl-7.54.0.tar.gz
+$ wget --no-check-certificate https://curl.haxx.se/download/curl-7.47.1.tar.gz
 $ tar xzf zlib-1.2.11.tar.gz
 $ tar xzf bzip2-1.0.6.tar.gz
 $ tar xzf xz-5.2.2.tar.gz
