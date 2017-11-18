@@ -218,38 +218,8 @@ multiple versions of R, we recommend user to leverage Anaconda,
 Python's package and environment manager, to 
 allow users to take control of the set up process. 
 
-There exists a number of Python Anaconda modules on
-Palmetto:
-
-```bash
-$ module avail anaconda
-anaconda/2.5.0          anaconda/4.3.0(default) anaconda3/4.2.0
-anaconda/4.2.0          anaconda3/2.5.0         anaconda3/4.3.0
-
-$ module add anaconda3/2.5.0
-
-$ python --version
-Python 3.5.2 :: Anaconda 2.5.0 (64-bit)
-
-$ which python
-/software/anaconda3/2.5.0/bin/python
-```
-The highest possible version of R supported by Palmetto's Anaconda is R 3.4.1 (anaconda3/4.3.0). Version 4.2.0 of Anaconda 
-(anaconda and anaconda3) also supports R 3.4.1; however, trying to set up R in this conda is not straight forward since an 
-existing version of R (3.3.1) was already installed to support the R kernel of JupyterHub. 
-
-To set up R 3.4.1 in anaconda3/4.3.0, the following steps must be done:
-
-```
-$ module load anaconda3/4.3.0
-$ conda create --name rstudio-anaconda3-4.3.0 python=3.6
-$ source activate rstudio-anaconda3-4.3.0
-$ conda config --add channels conda-forge
-$ conda config --add channels r
-$ conda install r
-$ conda clean --all
-```
-If you want to have a later version of R (3.4.2) and also to install RStudio (1.1.383), one of the most popular IDE for R, 
+The highest possible version of R supported by Palmetto's Anaconda is R 3.4.1 (anaconda3/4.3.0) and RStudio is not supported for 
+this conda. If you want to have a later version of R (3.4.2) and also to install RStudio (1.1.383), one of the most popular IDE for R, 
 you will need to install a local version of Anaconda in your home directory. 
 
 ```
