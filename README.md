@@ -5,7 +5,7 @@
     - [The default (system) R](#the-default-system-r)
     - [R Modules](#r-from-modules)
     - [R from local installation](#r-from-local-installation)
-    - [R and RStudio from Python Anaconda](#r-from-python-anaconda)
+    - [R and RStudio from Python Anaconda](#r-and-rstudio-from-python-anaconda)
     - [Which R should I use?](#which-r-should-i-use)
   - [Installing R packages](#installing-r-packages)
     - [Using `install.package` to install packages and dependencies from CRAN repository](#using-install.packages-to-install-packages-and-dependencies)
