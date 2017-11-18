@@ -5,7 +5,7 @@
     - [The default (system) R](#the-default-system-r)
     - [R Modules](#r-from-modules)
     - [R from local installation](#r-from-local-installation)
-    - [R from Python Anaconda](#r-from-python-anaconda)
+    - [R and RStudio from Python Anaconda](#r-from-python-anaconda)
     - [Which R should I use?](#which-r-should-i-use)
   - [Installing R packages](#installing-r-packages)
     - [Using `install.package` to install packages and dependencies from CRAN repository](#using-install.packages-to-install-packages-and-dependencies)
@@ -78,7 +78,7 @@ Any applications or packages that users
 may build using the system R
 will likely not run if this happens.
 
-### R From Modules
+### R from Modules
 
 R is also available on Palmetto under the form of 
 software modules. These are copies of different versions
@@ -108,7 +108,7 @@ new releases from R (current version 3.3.1) makes it
 difficult to maintain numerous versions
 of R in a shared computing environment like Palmetto.
 
-### R From Local Installation
+### R from Local Installation
 
 It is also possible for users to build, configure, and install
 customized version of R from source. To do so, the following
@@ -211,21 +211,20 @@ Type 'q()' to quit R.      
 ```
 
 
-### R From Python Anaconda
+### R and RStudio from Python Anaconda
 
 To create a robust environment that can support
-multiple versions of R, the Palmetto 
-cluster leverages Anaconda, 
+multiple versions of R, we recommend user to leverage Anaconda, 
 Python's package and environment manager, to 
 allow users to take control of the set up process. 
 
-The only prerequisite for this approach is to 
-load one of the Python Anaconda modules available on
+There exists a number of Python Anaconda modules on
 Palmetto:
 
 ```bash
 $ module avail anaconda
-anaconda/1.9.1  anaconda/2.3.0  anaconda/2.4.0  anaconda/2.5.0  anaconda/4.0.0  anaconda3/2.5.0 anaconda3/4.0.0
+anaconda/2.5.0          anaconda/4.3.0(default) anaconda3/4.2.0
+anaconda/4.2.0          anaconda3/2.5.0         anaconda3/4.3.0
 
 $ module add anaconda3/2.5.0
 
@@ -235,27 +234,59 @@ Python 3.5.2 :: Anaconda 2.5.0 (64-bit)
 $ which python
 /software/anaconda3/2.5.0/bin/python
 ```
+The highest possible version of R supported by Palmetto's Anaconda is R 3.4.1 (anaconda3/4.3.0). Version 4.2.0 of Anaconda 
+(anaconda and anaconda3) also supports R 3.4.1; however, trying to set up R in this conda is not straight forward since an 
+existing version of R (3.3.1) was already installed to support the R kernel of JupyterHub. 
 
+To set up R 3.4.1 in anaconda3/4.3.0, the following steps must be done:
 
-Currently, a conda environment containing R 3.3.1
-is already set up for Anaconda3/4.2.0, and this is 
-also the default R kernel for Palmetto's JupyterHub
-
-```bash
-$ module load anaconda3/4.2.0
-
-$ source activate R
-(R) [lngo@node0042 ~]$ R --version
-R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
-Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under the terms of the
-GNU General Public License versions 2 or 3.
-For more information about these matters see
-http://www.gnu.org/licenses/.
 ```
+$ module load anaconda3/4.3.0
+$ conda create --name rstudio-anaconda3-4.3.0 python=3.6
+$ source activate rstudio-anaconda3-4.3.0
+$ conda config --add channels conda-forge
+$ conda config --add channels r
+$ conda install r
+$ conda clean --all
+```
+If you want to have a later version of R (3.4.2) and also to install RStudio (1.1.383), one of the most popular IDE for R, 
+you will need to install a local version of Anaconda in your home directory. 
+
+```
+$cd tmp 
+$ wget https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
+$ sh Anaconda3-5.0.1-Linux-x86_64.sh
+```
+
+*The download link of `wget` can change over time. You can visit [Continuum's website](https://www.anaconda.com/download/#linux) 
+to search for the latest version of Anaconda*. 
+
+Assuming that you choose to install anaconda into a directory called **software** in 
+your home directory, you can follow the next steps to set up R and RStudio:
+
+```
+$ export PATH=/home/$USER/software/anaconda3/bin:$PATH
+$ conda create --name rstudio-anaconda3-5.0.1 python=3.6
+$ source activate rstudio-anaconda3-5.0.1 python=3.6
+$ conda config --add channels conda-forge
+$ conda config --add channels r
+$ conda install r
+$ conda clean --all
+$ conda install rstudio
+$ conda clean --all
+```
+
+To run rstudio, you will need to follow the 
+[Palmetto User Guide](https://www.palmetto.clemson.edu/palmetto/userguide_howto_run_graphical_applications.html) 
+to run graphical applications on Palmetto. After finished requesting a compute node with graphical application support, 
+you can run the following:
+
+```
+$ export PATH=/home/$USER/software/anaconda3/bin:$PATH
+$ source activate rstudio-anaconda3-5.0.1
+$ rstudio
+```
+
 
 ### Which R should I use?
 
@@ -284,70 +315,26 @@ and because users do not have root (administrative) privileges on the cluster.
 Most packages and their dependencies can be installed in one of the following ways:
 
 1. Using `install.packages`
-2. Downloading and building the package and its dependencies yourself
-3. Using the `conda`
+2. Installing packages from files
+3. Installing packages from development repositories outside of CRAN. 
 
-Several packages will provide the option
-to install in more than one way.
-For example, see the [installation instructions
-for the `mpi4py` package][mpi4py-install],
-which can be installed either using `pip`,
-or by downloading and building from source.
+### Using `install.packages` to install packages and dependencies from CRAN repository
 
-It is not necessary that you install *all* packages
-using `pip`,
-or build *all* packages yourself.
-Your setup can contain several packages,
-and each one may be installed in any of the above ways.
-
-### Using `install.package` to install packages and dependencies from CRAN repository
-
-`pip` is a program that installs Python packages,
-and automatically installs any other Python packages
-that are dependencies:
-
-```bash
-$ pip install package-name --user
-```
-
-The `--user` switch ensures that the package is installed
-into your home directory, and not into the `/usr/local` directory.
-This will only install the package
-for the currently running version of Python.
-
-Unfortunately,
-`pip` is generally not well suited for installing scientific software packages
-like `numpy` or `matplotlib` (see [here](https://packaging.python.org/science/) for explanation).
+When you first call `install.packages` inside R, a prompt will pop up saying that you do not have permission to 
+install into the root directory path, and R will offer to install packages into a local directory inside your 
+home directory. Go ahead and accept this offer. From this point on, all packages will be installed into 
+this local directory and R will automatically remember this location for future references. 
 
 ### Installing packages from file
 
-When packages cannot be installed via `pip`
-or when you want a package to be built in a specific way,
-e.g., linked against specific libraries,
-you may need to download and build the package for yourself.
-The instructions for building a package are generally
-a part of the package's documentation.
-For example, see the instructions to manually install the `mpi4py` package
-[here][mpi4py-install]. Importantly, notice the last step:
-
-```bash
-python setup.py install --user
-```
-
-The `--user` switch ensures that the package is installed
-to your home directory, and not a directory like `/usr/local`.
-Even when you manually build a package,
-it is only compatible and available for the specific
-version of Python loaded while building it.
-
-When building packages yourself,
-you will generally have to manage dependencies
-yourself, i.e., they will not automatically be installed.
+You can download the packages directly from CRAN and use `R CMD INSTALL <package file>` to install these packages from 
+the Linux terminal on Palmetto. 
 
 ### Installing packages from development repositories
 
-[mpi4py-install]: https://mpi4py.scipy.org/docs/usrman/install.html
-[python-packaging-science]: https://packaging.python.org/science/
-[anaconda-overview]: https://www.continuum.io/anaconda-overview
-[anaconda-pkg-list]: https://docs.continuum.io/anaconda/pkg-docs
-[conda-docs]: http://conda.pydata.org/docs/
+There are many useful R packages that are not part of the CRAN repository. For those that are available on Github, the `devtools` 
+library can be used to install them. 
+
+If you use R installed through `conda`, it is possible to also install packages for R from the `conda` world. In many cases, these 
+present significant advantages over the traditional methods (install.packages() or `devtools`), as `conda` will take care of any 
+non-R dependencies that need to be installed. 
