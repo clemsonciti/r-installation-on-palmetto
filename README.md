@@ -156,7 +156,7 @@ $ ./configure --enable-utf8 --prefix=$HOME/software/packages
 $ make -j3
 $ make install
 $ cd ../openssl-1.0.0k
-$ ./config --prefix-$HOME/software/packages --openssldir=$HOME/software/openssl shared
+$ ./config --prefix=$HOME/software/packages --openssldir=$HOME/software/openssl shared
 $ make
 $ make install
 $ cd ../curl-7.47.1.tar.gz
